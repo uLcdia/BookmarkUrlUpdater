@@ -1,0 +1,126 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 20px;
+  color: #333;
+  min-width: 500px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 2rem;
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.rules-container, .bookmarks-container {
+  margin: 1rem 0;
+}
+
+.rule-header {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 0.5rem;
+}
+
+.rule-header .header-group {
+  flex: 1;
+}
+
+.rule-header .action-column {
+  width: 80px;
+}
+
+.rule-item, .bookmark-item {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.rule-item .header-group {
+  flex: 1;
+}
+
+.rule-item .header-group label {
+  display: none;
+}
+
+.header-group {
+  text-align: center;
+  margin: 0.5rem 0.5rem;
+  flex-grow: 1;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+input[type="text"], input[type="checkbox"] {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.controls {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #e9ecef;
+}
+
+.button.primary {
+  background: #0066cc;
+  color: white;
+}
+
+.error-message {
+  background-color: rgba(255, 43, 43, 0.09);
+  color: rgb(125, 53, 59);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.success-message {
+  background-color: rgba(33, 195, 84, 0.1);
+  color: rgb(23, 114, 51);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}

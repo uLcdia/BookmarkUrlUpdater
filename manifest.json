@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "Bookmark URL Updater",
+  "version": "0.1",
+  "description": "Update bookmark URL when visited",
+  "author": "Max Caulfield",
+  "permissions": [
+    "bookmarks",
+    "tabs",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "icons": {
+    "48": "icons/bookmark-48.png",
+    "96": "icons/bookmark-96.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "48": "icons/bookmark-48.png",
+      "96": "icons/bookmark-96.png"
+    },
+    "default_title": "Bookmark URL Updater"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}
