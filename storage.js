@@ -4,15 +4,16 @@ const Storage = {
     return rules;
   },
 
-  async addRule(bookmarkId, name, pattern) {
-    if (!bookmarkId || !pattern) throw new Error('Missing required fields');
+  async addRule(bookmarkId, name, includePattern, excludePattern) {
+    if (!bookmarkId || !includePattern) throw new Error('Missing required fields');
     
     const ruleId = crypto.randomUUID();
     await browser.storage.local.set({
       [ruleId]: {
         bookmarkId,
         name: name || `Rule ${ruleId.slice(0,8)}`,
-        pattern,
+        includePattern,
+        excludePattern,
         enabled: true,
         lastUpdated: new Date().toISOString()
       }

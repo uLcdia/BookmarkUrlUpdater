@@ -1,6 +1,6 @@
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   console.debug('[Debug] Tab updated event received', { tabId, changeInfo, tab });
-  
+
   if (changeInfo.status !== 'complete' || !tab.url) {
     console.debug('[Debug] Skipping - status not complete or no URL');
     return;
@@ -19,23 +19,28 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
     for (const [ruleId, rule] of Object.entries(storageData)) {
       console.debug(`[Debug] Processing rule ${ruleId}`, rule);
-      
+
       if (!rule.enabled) {
         console.debug(`[Debug] Rule ${ruleId} is disabled - skipping`);
         continue;
       }
 
       try {
-        console.debug(`[Debug] Creating RegExp from pattern: ${rule.pattern}`);
-        const urlPattern = new RegExp(rule.pattern);
-        const patternMatch = urlPattern.test(currentUrl);
-        console.debug(`[Debug] Pattern test result: ${patternMatch}`);
+        console.debug(`[Debug] Creating RegExp from include pattern: ${rule.includePattern}`);
+        const includePatternRegex = new RegExp(rule.includePattern);
+        const includePatternMatch = includePatternRegex.test(currentUrl);
+        console.debug(`[Debug] Include pattern test result: ${includePatternMatch}`);
 
-        if (patternMatch) {
+        console.debug(`[Debug] Creating RegExp from exclude pattern: ${rule.excludePattern}`);
+        const excludePatternRegex = new RegExp(rule.excludePattern);
+        const excludePatternMatch = !rule.excludePattern ? false : excludePatternRegex.test(currentUrl);
+        console.debug(`[Debug] Exclude pattern test result: ${excludePatternMatch}`);
+
+        if (includePatternMatch && !excludePatternMatch) {
           console.debug(`[Debug] Pattern matched - checking bookmark ${rule.bookmarkId}`);
           const bookmark = await browser.bookmarks.get(rule.bookmarkId);
           const existingUrl = bookmark[0]?.url;
-          
+
           if (existingUrl === currentUrl) {
             console.debug(`[Debug] Bookmark URL unchanged - skipping update`);
             continue;
@@ -44,6 +49,8 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
           console.debug(`[Debug] Updating bookmark from ${existingUrl} to ${currentUrl}`);
           await browser.bookmarks.update(rule.bookmarkId, { url: currentUrl });
           console.log(`[Info] Updated bookmark ${rule.bookmarkId}`);
+        } else {
+          console.debug(`[Debug] Pattern not matched - skipping bookmark check`);
         }
       } catch (error) {
         console.error(`[Error] Rule ${ruleId}:`, error);

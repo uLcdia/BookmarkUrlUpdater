@@ -13,7 +13,7 @@ async function loadRules() {
   try {
     const rules = await window.Storage.getRules();
     rulesList.innerHTML = '';
-    
+
     for (const [ruleId, rule] of Object.entries(rules)) {
       const ruleElement = createRuleElement(ruleId, rule);
       rulesList.appendChild(ruleElement);
@@ -47,7 +47,10 @@ function createRuleElement(ruleId, rule) {
       <input type="text" value="${escapeHTML(rule.name)}" data-field="name">
     </div>
     <div class="header-group">
-      <input type="text" value="${escapeHTML(rule.pattern)}" data-field="pattern">
+      <input type="text" value="${escapeHTML(rule.includePattern)}" data-field="include-pattern">
+    </div>
+    <div class="header-group">
+      <input type="text" value="${escapeHTML(rule.excludePattern)}" data-field="exclude-pattern">
     </div>
     <div class="header-group">
       <p>${rule.bookmarkId}</p>
@@ -85,14 +88,16 @@ function createBookmarkElement(bookmark) {
   element.querySelector('.add-bookmark-rule').addEventListener('click', async () => {
     try {
       const hostname = new URL(bookmark.url).hostname;
-      const pattern = `^https?://${hostname.replace(/\./g, '\\.')}`;
-      
+      const includePattern = `^https?://${hostname.replace(/\./g, '\\.')}`;
+      const excludePattern = '';
+
       await window.Storage.addRule(
           bookmark.id,
           bookmark.title,
-          pattern
+          includePattern,
+          excludePattern,
       );
-      
+
       await loadRules();
     } catch (error) {
       showError('Failed to create rule: ' + error.message);
@@ -134,12 +139,13 @@ function showSuccess(message) {
 saveRulesButton.addEventListener('click', async () => {
   try {
     const updatePromises = [];
-    
+
     document.querySelectorAll('.rule-item').forEach(element => {
       const ruleId = element.dataset.ruleId;
       const ruleData = {
         name: element.querySelector('[data-field="name"]').value,
-        pattern: element.querySelector('[data-field="pattern"]').value,
+        includePattern: element.querySelector('[data-field="include-pattern"]').value,
+        excludePattern: element.querySelector('[data-field="exclude-pattern"]').value,
         enabled: element.querySelector('[data-field="enabled"]').checked
       };
       updatePromises.push(window.Storage.updateRule(ruleId, ruleData));
