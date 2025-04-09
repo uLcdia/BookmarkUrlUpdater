@@ -61,3 +61,7 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   }
   console.debug('[Debug] Finished processing tab update');
 });
+
+browser.browserAction.onClicked.addListener(() => {
+  browser.runtime.openOptionsPage();
+});
